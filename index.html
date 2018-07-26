@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Generate HD Wallet Mnemonic Phrase Intl</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+  <div id="app">
+    <h1 class="title">
+      Generate HD Wallet Mnemonic Phrase Intl
+    </h1>
+    <div class="content">
+      <p>
+        <el-radio-group v-model="bits">
+          <el-radio-button label="128">128 bits</el-radio-button>
+          <el-radio-button label="256">258 bits</el-radio-button>
+        </el-radio-group>
+      </p>
+      <p>
+        <el-radio-group v-model="language">
+          <el-radio-button label="english">English</el-radio-button>
+          <el-radio-button label="chinese_simplified">简体中文</el-radio-button>
+          <el-radio-button label="chinese_traditional">繁體中文</el-radio-button>
+          <el-radio-button label="japanese">日本語</el-radio-button>
+          <el-radio-button label="korean">한국어</el-radio-button>
+          <el-radio-button label="french">Français</el-radio-button>
+          <el-radio-button label="italian">Italiano</el-radio-button>
+          <el-radio-button label="spanish">Español</el-radio-button>
+        </el-radio-group>
+      </p>
+      <p>
+        <el-button @click="generate">Generate</el-button>
+      </p>
+      <p>
+        {{ mnemonic }}
+      </p>
+      <p>
+        <qrcode v-if="mnemonic.length > 0" :value="mnemonic" :options="{ size: 200 }"></qrcode>
+      </p>
+    </div>
+    <span class="footer">
+      <a href="https://github.com/bibenwei/generate-mnemonic-phrase-intl" target="_blank" title="Github" class="link">
+        <span>Github</span>
+      </a>
+    </span>
+  </div>
+</body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="bip39.js"></script>
+  <script src="https://unpkg.com/@xkeshi/vue-qrcode/dist/vue-qrcode.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      var Vue = window.Vue;
+      var VueQrcode = window.VueQrcode;
+      Vue.component('qrcode', VueQrcode);
+      new Vue({
+        el: '#app',
+        component: {
+          qrcode: VueQrcode,
+        },
+        data: function() {
+          return {
+            bits: "128",
+            language: 'english',
+            mnemonic: '',
+          }
+        },
+        methods: {
+          generate() {
+            this.mnemonic = BIP39.generateMnemonic(parseInt(this.bits), 0, BIP39.wordlists[this.language]);
+          }
+        }
+      })
+    });
+  </script>
+  <style type="text/css">
+    #app {
+      text-align: center;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    .title, .content, .footer {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+    }
+    .title {
+      top: 10vh;
+    }
+    .content {
+      height: 40vh;
+    }
+    .footer {
+      bottom: 10vh;
+    }
+    a {
+      text-decoration: none;
+      color: #409EFF;
+    }
+  </style>
+</html>
